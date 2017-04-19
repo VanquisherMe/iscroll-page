@@ -864,7 +864,7 @@ IScroll.prototype = {
 		this.scrollTo(x, y, time, easing);
 	},
 
-	scrollTo: function (x, y, time, easing) {
+	scrollTo: function (x, y, time, easing,cb) {
 		easing = easing || utils.ease.circular;
 
 		this.isInTransition = this.options.useTransition && time > 0;

@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>Title</title>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>slideUpDownRefresh</title>
+    <link rel="stylesheet" type="text/css" href = "http://www.zhangyunling.com/asserts/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href = "http://www.zhangyunling.com/asserts/css/bootstrap-theme.css?v=1">
     <style>
         #wrapper {
             position: absolute;
             z-index: 1;
-            top: 45px;
-            bottom: 48px;
+            top: 0px;
+            bottom: 0px;
             left: 0;
             width: 100%;
-            background: #ccc;
+            background: #fff;
             overflow: hidden;
         }
+
         #scroller {
             position: absolute;
             z-index: 1;
@@ -37,13 +40,49 @@
             -o-text-size-adjust: none;
             text-size-adjust: none;
         }
+
+        #scroller-pullDown,#scroller-pullUp {
+            background: #fff;
+            height: 40px;
+            line-height: 40px;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ccc;
+            font-weight: bold;
+            font-size: 14px;
+            color: #888;
+            text-align:center;
+            position:absolute;
+            left:0px;
+            width:100%;
+        }
+        #scroller-pullDown{
+            top:-40px;
+        }
+        #scroller-pullUp{
+            bottom:-40px;
+        }
+
+        #scroller-pullDown .pull-up-msg,#scroller-pullUp .pull-down-msg {
+            padding-left:20px;
+        }
+
+        #scroller-pullDown .pull-down-icon,#scroller-pullUp .pull-up-icon{
+            display:inline-block;
+            color:#f00;
+            font-size:1.4;
+            -webkit-transform:rotate(0deg);
+            -webkit-transition-property: -webkit-transform;
+            -webkit-transition-duration: 500ms;
+        }
+        #scroller-pullDown .pull-down-icon.reverse_icon,#scroller-pullUp .pull-up-icon.reverse_icon{
+            -webkit-transform: rotate(-180deg);
+        }
         #scroller ul {
             list-style: none;
             padding: 0;
             margin: 0;
             width: 100%;
             text-align: left;
-            transition: all 0.6s;
         }
 
         #scroller li {
@@ -55,35 +94,17 @@
             background-color: #fafafa;
             font-size: 14px;
         }
-        .scroller-pullDown{
-            width: 100%;
-            height: 50px;
-            background-color: #00B300;
-            position: absolute;
-            top:-50px;
-        }
-        .scroller-pullDown.refreshing{
-            position: relative;
-            top: 0;
-        }
-        .scroller-pullUp{
-            height: 60px;
-            background-color: #00B300;
-            display: none;
-            text-align: center;
-        }
-
-
     </style>
 </head>
-<body>
+<body onload="loaded()">
 <div id="wrapper">
-
-    <div id="scroller" class="">
-        <div class="scroller-pullDown">刷新中..</div>
-        <div class="scroller-conten">
-            <div style="height: 300px; background-color: #313a88"></div>
-            <ul class="box">
+    <div id="scroller">
+        <div id = "scroller-pullDown">
+            <span id = "down-icon" class = "icon-double-angle-down pull-down-icon"></span>
+            <span id = "pullDown-msg" class = "pull-down-msg">下拉刷新</span>
+        </div>
+        <div id = "scroller-content">
+            <ul>
                 <li>Pretty row 1</li>
                 <li>Pretty row 2</li>
                 <li>Pretty row 3</li>
@@ -136,89 +157,60 @@
                 <li>Pretty row 50</li>
             </ul>
         </div>
-        <div class="scroller-pullUp">loading...</div>
+        <div id = "scroller-pullUp">
+            <span id = "up-icon" class = "icon-double-angle-up pull-up-icon"></span>
+            <span id = "pullUp-msg" class = "pull-up-msg">上拉刷新</span>
+        </div>
     </div>
-
 </div>
-<script src="jquery.js"></script>
-<!--<script src="VX/js/lib/iosselect/iscroll.js"></script>-->
-<script src="build/iscroll-probe.js"></script>
-    <script type="text/javascript">
-
-
-
+</body>
+<script type="text/javascript" src="http://www.zhangyunling.com/asserts/js/jquery.min.js"></script>
+<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript">
     function loaded () {
-        var myScroll;
-        var $scroller=$("#scroller");
-        var $scrollerPullDown = $(".scroller-pullDown");
-        var $scrollerPullUp = $(".scroller-pullUp");
-        var pageIndex=0;
-        var isPullDown = false;
-        var isPullUp = false;
-        myScroll = new IScroll('#wrapper', {
-            mouseWheel: true,
-            scrollbars: true,
-//            fadeScrollbars:true,
-            probeType: 3,
-            interactiveScrollbars:true,
-            shrinkScrollbars: 'scale'
+        var myScroll,
+            upIcon = $("#up-icon"),
+            downIcon = $("#down-icon");
+
+        myScroll = new IScroll('#wrapper', { probeType: 3, mouseWheel: true });
+
+        myScroll.on("scroll",function(){
+            var y = this.y,
+                maxY = this.maxScrollY - y,
+                downHasClass = downIcon.hasClass("reverse_icon"),
+                upHasClass = upIcon.hasClass("reverse_icon");
+
+            if(y >= 40){
+                !downHasClass && downIcon.addClass("reverse_icon");
+                return "";
+            }else if(y < 40 && y > 0){
+                downHasClass && downIcon.removeClass("reverse_icon");
+                return "";
+            }
+
+            if(maxY >= 40){
+                !upHasClass && upIcon.addClass("reverse_icon");
+                return "";
+            }else if(maxY < 40 && maxY >=0){
+                upHasClass && upIcon.removeClass("reverse_icon");
+                return "";
+            }
         });
 
-        myScroll.scrollTo(0, 80,1000);
-        myScroll.on('scroll', function () {
-
-           if((this.maxScrollY - this.y) >40 && !isPullUp ){
-               isPullUp = true;
-               $scrollerPullUp.show()
-               scrollerPullUp(function () {
-                   $scrollerPullUp.hide()
-                   isPullUp = false
-                   setTimeout(function () {
-                       myScroll.refresh()
-                   },0)
-               })
-           }
-
-           if(this.y >40 && !isPullDown){
-               isPullDown=true;
-//               $scrollerPullDown.addClass("refreshing")
-
-               scrollerPullDown(function () {
-                   isPullDown=false
-//                   $scrollerPullDown.removeClass("refreshing")
-                   setTimeout(function () {
-                       myScroll.refresh()
-                   },0)
-               })
-           }
-
-
+        myScroll.on("slideDown",function(){
+            if(this.y > 40){
+                alert("slideDown");
+                upIcon.removeClass("reverse_icon")
+            }
         });
-        function scrollerPullUp(cb) {
-            setTimeout(function () {
-                console.log("scrollerPullUp")
-                $(".box").append("<li>去问去问1</li><li>去问去问2</li><li>去问去问3</li><li>去问去问4</li><li>去问去问1</li><li>去问去问2</li><li>去问去问3</li><li>去问去问4</li><li>去问去问1</li><li>去问去问2</li><li>去问去问3</li><li>去问去问4</li>")
-                cb()
-            },2000)
 
-        }
-        function scrollerPullDown(cb) {
-            setTimeout(function () {
-                console.log("scrollerPullDown")
-
-                cb()
-            },2000)
-
-        }
-
+        myScroll.on("slideUp",function(){
+            if(this.maxScrollY - this.y > 40){
+                alert("slideUp");
+                upIcon.removeClass("reverse_icon")
+            }
+        });
     }
 
-
-
-    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
-    loaded ()
 </script>
-
-</body>
 </html>
