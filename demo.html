@@ -1,216 +1,135 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <title>slideUpDownRefresh</title>
-    <link rel="stylesheet" type="text/css" href = "http://www.zhangyunling.com/asserts/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href = "http://www.zhangyunling.com/asserts/css/bootstrap-theme.css?v=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+    <title>iScroll下拉刷新上滑加载</title>
     <style>
-        #wrapper {
-            position: absolute;
-            z-index: 1;
-            top: 0px;
-            bottom: 0px;
-            left: 0;
-            width: 100%;
-            background: #fff;
-            overflow: hidden;
-        }
+        body,ul,li {padding:0;margin:0;border:0}
+        body {font-size:12px;font-family:microsoft yahei}
 
-        #scroller {
-            position: absolute;
-            z-index: 1;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
-            width: 100%;
-            -webkit-transform: translateZ(0);
-            -moz-transform: translateZ(0);
-            -ms-transform: translateZ(0);
-            -o-transform: translateZ(0);
-            transform: translateZ(0);
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-text-size-adjust: none;
-            -moz-text-size-adjust: none;
-            -ms-text-size-adjust: none;
-            -o-text-size-adjust: none;
-            text-size-adjust: none;
-        }
+        .header {position:absolute;top:0; left:0;width:100%;height:45px;line-height:45px;font-size:16px;text-align:center;background:#e6e6e6}
+        .footer {position:absolute;bottom:0; left:0;width:100%;height:48px;line-height:48px;font-size:16px;text-align:center;background:#e6e6e6}
 
-        #scroller-pullDown,#scroller-pullUp {
-            background: #fff;
-            height: 40px;
-            line-height: 40px;
-            padding: 5px 10px;
-            border-bottom: 1px solid #ccc;
-            font-weight: bold;
-            font-size: 14px;
-            color: #888;
-            text-align:center;
-            position:absolute;
-            left:0px;
-            width:100%;
-        }
-        #scroller-pullDown{
-            top:-40px;
-        }
-        #scroller-pullUp{
-            bottom:-40px;
-        }
-
-        #scroller-pullDown .pull-up-msg,#scroller-pullUp .pull-down-msg {
-            padding-left:20px;
-        }
-
-        #scroller-pullDown .pull-down-icon,#scroller-pullUp .pull-up-icon{
-            display:inline-block;
-            color:#f00;
-            font-size:1.4;
-            -webkit-transform:rotate(0deg);
-            -webkit-transition-property: -webkit-transform;
-            -webkit-transition-duration: 500ms;
-        }
-        #scroller-pullDown .pull-down-icon.reverse_icon,#scroller-pullUp .pull-up-icon.reverse_icon{
-            -webkit-transform: rotate(-180deg);
-        }
-        #scroller ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            text-align: left;
-        }
-
-        #scroller li {
-            padding: 0 10px;
-            height: 40px;
-            line-height: 40px;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #fff;
-            background-color: #fafafa;
-            font-size: 14px;
-        }
+        #wrapper {position:absolute;top:45px; bottom:48px;left:0;width:100%}
+        #scroller li {padding:0 10px;height:60px;line-height:60px;background:#ecf6ff;margin-top:10px}
+        #pullDown, #pullUp {padding:0 10px;height:30px;line-height:30px;color:#888;text-align:center}
     </style>
 </head>
-<body onload="loaded()">
+<body>
+
+<div class="header">header</div>
 <div id="wrapper">
     <div id="scroller">
-        <div id = "scroller-pullDown">
-            <span id = "down-icon" class = "icon-double-angle-down pull-down-icon"></span>
-            <span id = "pullDown-msg" class = "pull-down-msg">下拉刷新</span>
+        <div id="pullDown">
+            <span class="pullDownLabel">下拉刷新</span>
         </div>
-        <div id = "scroller-content">
-            <ul>
-                <li>Pretty row 1</li>
-                <li>Pretty row 2</li>
-                <li>Pretty row 3</li>
-                <li>Pretty row 4</li>
-                <li>Pretty row 5</li>
-                <li>Pretty row 6</li>
-                <li>Pretty row 7</li>
-                <li>Pretty row 8</li>
-                <li>Pretty row 9</li>
-                <li>Pretty row 10</li>
-                <li>Pretty row 11</li>
-                <li>Pretty row 12</li>
-                <li>Pretty row 13</li>
-                <li>Pretty row 14</li>
-                <li>Pretty row 15</li>
-                <li>Pretty row 16</li>
-                <li>Pretty row 17</li>
-                <li>Pretty row 18</li>
-                <li>Pretty row 19</li>
-                <li>Pretty row 20</li>
-                <li>Pretty row 21</li>
-                <li>Pretty row 22</li>
-                <li>Pretty row 23</li>
-                <li>Pretty row 24</li>
-                <li>Pretty row 25</li>
-                <li>Pretty row 26</li>
-                <li>Pretty row 27</li>
-                <li>Pretty row 28</li>
-                <li>Pretty row 29</li>
-                <li>Pretty row 30</li>
-                <li>Pretty row 31</li>
-                <li>Pretty row 32</li>
-                <li>Pretty row 33</li>
-                <li>Pretty row 34</li>
-                <li>Pretty row 35</li>
-                <li>Pretty row 36</li>
-                <li>Pretty row 37</li>
-                <li>Pretty row 38</li>
-                <li>Pretty row 39</li>
-                <li>Pretty row 40</li>
-                <li>Pretty row 41</li>
-                <li>Pretty row 42</li>
-                <li>Pretty row 43</li>
-                <li>Pretty row 44</li>
-                <li>Pretty row 45</li>
-                <li>Pretty row 46</li>
-                <li>Pretty row 47</li>
-                <li>Pretty row 48</li>
-                <li>Pretty row 49</li>
-                <li>Pretty row 50</li>
-            </ul>
-        </div>
-        <div id = "scroller-pullUp">
-            <span id = "up-icon" class = "icon-double-angle-up pull-up-icon"></span>
-            <span id = "pullUp-msg" class = "pull-up-msg">上拉刷新</span>
+        <ul id="thelist">
+            <!--<li>原始数据</li>-->
+        </ul>
+        <div id="pullUp">
+            <span class="pullUpLabel">上拉加载更多</span>
         </div>
     </div>
 </div>
-</body>
-<script type="text/javascript" src="http://www.zhangyunling.com/asserts/js/jquery.min.js"></script>
+<div class="footer">footer</div>
+
 <script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript">
-    function loaded () {
-        var myScroll,
-            upIcon = $("#up-icon"),
-            downIcon = $("#down-icon");
+<script>
+    var myScroll,pullDownEl, pullDownOffset,pullUpEl, pullUpOffset,generatedCount = 0;
 
-        myScroll = new IScroll('#wrapper', { probeType: 3, mouseWheel: true });
+    function loaded() {
+        //动画部分
+        pullDownEl = document.getElementById('pullDown');
+        pullDownOffset = pullDownEl.offsetHeight;
+        pullUpEl = document.getElementById('pullUp');
+        pullUpOffset = pullUpEl.offsetHeight;
+        myScroll = new iScroll('wrapper', {
+            useTransition: true,
+            topOffset: pullDownOffset,
+            onRefresh: function () {
+                if (pullDownEl.className.match('loading')) {
+                    pullDownEl.className = '';
+                    pullDownEl.querySelector('.pullDownLabel').innerHTML = '下拉刷新';
+                } else if (pullUpEl.className.match('loading')) {
+                    pullUpEl.className = '';
+                    pullUpEl.querySelector('.pullUpLabel').innerHTML = '上拉加载更多';
+                }
+            },
+            onScrollMove: function () {
 
-        myScroll.on("scroll",function(){
-            var y = this.y,
-                maxY = this.maxScrollY - y,
-                downHasClass = downIcon.hasClass("reverse_icon"),
-                upHasClass = upIcon.hasClass("reverse_icon");
-
-            if(y >= 40){
-                !downHasClass && downIcon.addClass("reverse_icon");
-                return "";
-            }else if(y < 40 && y > 0){
-                downHasClass && downIcon.removeClass("reverse_icon");
-                return "";
-            }
-
-            if(maxY >= 40){
-                !upHasClass && upIcon.addClass("reverse_icon");
-                return "";
-            }else if(maxY < 40 && maxY >=0){
-                upHasClass && upIcon.removeClass("reverse_icon");
-                return "";
+                if (this.y > 5 && !pullDownEl.className.match('flip')) {
+                    pullDownEl.className = 'flip';
+                    pullDownEl.querySelector('.pullDownLabel').innerHTML = '释放刷新';
+                    this.minScrollY = 0;
+                } else if (this.y < 5 && pullDownEl.className.match('flip')) {
+                    pullDownEl.className = '';
+                    pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+                    this.minScrollY = -pullDownOffset;
+                } else if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+                    pullUpEl.className = 'flip';
+                    pullUpEl.querySelector('.pullUpLabel').innerHTML = '释放刷新';
+                    this.maxScrollY = this.maxScrollY;
+                } else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+                    pullUpEl.className = '';
+                    pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Pull up to load more...';
+                    this.maxScrollY = pullUpOffset;
+                }
+            },
+            onScrollEnd: function () {
+                if (pullDownEl.className.match('flip')) {
+                    pullDownEl.className = 'loading';
+                    pullDownEl.querySelector('.pullDownLabel').innerHTML = '加载中';
+                    pullDownAction();	// Execute custom function (ajax call?)
+                } else if (pullUpEl.className.match('flip')) {
+                    pullUpEl.className = 'loading';
+                    pullUpEl.querySelector('.pullUpLabel').innerHTML = '加载中';
+                    pullUpAction();	// Execute custom function (ajax call?)
+                }
             }
         });
 
-        myScroll.on("slideDown",function(){
-            if(this.y > 40){
-                alert("slideDown");
-                upIcon.removeClass("reverse_icon")
-            }
-        });
+        loadAction();
+    }
+    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);//阻止冒泡
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 0); }, false);
 
-        myScroll.on("slideUp",function(){
-            if(this.maxScrollY - this.y > 40){
-                alert("slideUp");
-                upIcon.removeClass("reverse_icon")
-            }
-        });
+    //初始状态，加载数据
+    function loadAction(){
+        var el, li;
+        el = document.getElementById('thelist');
+        console.log(el.childNodes[0])
+        for (i=0; i<10; i++) {
+            li = document.createElement('li');
+            li.innerText = '初始数据--' + (++generatedCount);
+            el.appendChild(li, el.childNodes[0]);
+        }
+        myScroll.refresh();
     }
 
+    //下拉刷新当前数据
+    function pullDownAction () {
+        setTimeout(function () {
+            //这里执行刷新操作
+
+            myScroll.refresh();
+        }, 400);
+    }
+
+    //上拉加载更多数据
+    function pullUpAction () {
+        setTimeout(function () {
+            var el, li;
+            el = document.getElementById('thelist');
+            for (i=0; i<10; i++) {
+                li = document.createElement('li');
+                li.innerText = '上拉加载--' + (++generatedCount);
+                el.appendChild(li, el.childNodes[0]);
+            }
+            myScroll.refresh();
+        }, 400);
+    }
 </script>
+
+</body>
 </html>

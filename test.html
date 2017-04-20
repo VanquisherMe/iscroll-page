@@ -69,9 +69,14 @@
         .scroller-pullUp{
             height: 60px;
             background-color: #00B300;
-            display: none;
+            width: 100%;
             text-align: center;
         }
+
+      /*  .scroller-pullUp.active{
+            position: relative;
+            bottom: 0;
+        }*/
 
 
     </style>
@@ -163,43 +168,51 @@
             interactiveScrollbars:true,
             shrinkScrollbars: 'scale'
         });
-
-        myScroll.scrollTo(0, 80,1000);
         myScroll.on('scroll', function () {
 
-           if((this.maxScrollY - this.y) >40 && !isPullUp ){
-               isPullUp = true;
-               $scrollerPullUp.show()
-               scrollerPullUp(function () {
-                   $scrollerPullUp.hide()
-                   isPullUp = false
-                   setTimeout(function () {
-                       myScroll.refresh()
-                   },0)
-               })
-           }
+            if((this.maxScrollY - this.y) >40 && !isPullUp ){
+                isPullUp = true;
+                $scrollerPullUp.addClass("active")
 
-           if(this.y >40 && !isPullDown){
-               isPullDown=true;
-//               $scrollerPullDown.addClass("refreshing")
+                scrollerPullUp(function () {
+                    $scrollerPullUp.removeClass("active")
+                    isPullUp = false
+                    setTimeout(function () {
+                        myScroll.refresh()
+                    },0)
 
-               scrollerPullDown(function () {
-                   isPullDown=false
-//                   $scrollerPullDown.removeClass("refreshing")
-                   setTimeout(function () {
-                       myScroll.refresh()
-                   },0)
-               })
-           }
+                })
+            }
 
+            if(this.y >40 && !isPullDown){
+                isPullDown=true;
+                $scrollerPullDown.addClass("refreshing")
 
+                scrollerPullDown(function () {
+
+                    isPullDown=false
+                    $scrollerPullDown.removeClass("refreshing")
+                    setTimeout(function () {
+                        myScroll.refresh()
+                    },0)
+
+                })
+            }
+
+          /*  myScroll.on("scrollEnd",function () {
+             console.log("scrollEnd")
+                 setTimeout(function () {
+                    myScroll.refresh()
+                 },0)
+             })*/
         });
+
         function scrollerPullUp(cb) {
             setTimeout(function () {
                 console.log("scrollerPullUp")
                 $(".box").append("<li>去问去问1</li><li>去问去问2</li><li>去问去问3</li><li>去问去问4</li><li>去问去问1</li><li>去问去问2</li><li>去问去问3</li><li>去问去问4</li><li>去问去问1</li><li>去问去问2</li><li>去问去问3</li><li>去问去问4</li>")
                 cb()
-            },2000)
+            },1000)
 
         }
         function scrollerPullDown(cb) {
@@ -207,17 +220,17 @@
                 console.log("scrollerPullDown")
 
                 cb()
-            },2000)
+            },1000)
 
         }
 
     }
 
 
-
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
     loaded ()
+
 </script>
 
 </body>
